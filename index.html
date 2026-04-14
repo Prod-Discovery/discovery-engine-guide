@@ -137,7 +137,7 @@ const steps = [
       </div>
     </div>
     <div class="info-box"><strong>You stay in control.</strong> The engine pauses at every stage for your review. You can correct, adjust, skip ahead, or stop at any point.</div>
-    <div class="accent-tip"><strong>Best path: Claude Code</strong> &mdash; if your team has a component library repo, clone it locally and run the engine in Claude Code. It auto-detects your components, skips the extraction stage entirely, and produces the highest-fidelity prototypes. No screenshots needed.</div>
+    <div class="accent-tip"><strong>Tip:</strong> If your team already has a component library, the engine auto-detects it and skips the extraction stage entirely &mdash; producing higher-fidelity prototypes with no screenshots needed.</div>
   `},
   { num: "01", label: "Download the plugin", html: `
     <p>Download the plugin file directly using the button below. It\u2019s a single <code>.plugin</code> file &mdash; that\u2019s everything you need.</p>
@@ -155,20 +155,28 @@ const steps = [
     <div class="tip">&#x1F4A1; Save it somewhere easy to find &mdash; your Desktop or Downloads folder works fine. You\u2019ll upload it in the next step.</div>
   `},
   { num: "02", label: "Upload &amp; install", html: `
-    <p>Open <strong>Claude Code</strong> on your computer and follow these three steps:</p>
+    <p>Open the <strong>Claude desktop app</strong> on your computer, then switch to <strong>Cowork</strong> and follow these steps:</p>
     <div class="install-step">
       <div class="step-circle">1</div>
-      <div><div class="step-title">Upload the file</div><div class="step-desc">Drag the .plugin file into the Claude Code chat window, or use the attachment button to select it from your computer.</div></div>
+      <div><div class="step-title">Open Cowork</div><div class="step-desc">In the Claude desktop app, click <strong>Cowork</strong> in the left sidebar to switch to the Cowork environment.</div></div>
     </div>
     <div class="install-step">
       <div class="step-circle">2</div>
-      <div><div class="step-title">Ask Claude to install it</div><div class="cmd"><span class="cmd-prefix">You: </span>Please install this plugin</div></div>
+      <div><div class="step-title">Upload the file</div><div class="step-desc">Drag the .plugin file into the Cowork chat window, or use the attachment button to select it from your computer.</div></div>
     </div>
     <div class="install-step">
       <div class="step-circle">3</div>
+      <div><div class="step-title">Ask Claude to install it</div><div class="cmd"><span class="cmd-prefix">You: </span>Please install this plugin</div></div>
+    </div>
+    <div class="install-step">
+      <div class="step-circle">4</div>
       <div><div class="step-title">Wait for confirmation</div><div class="step-desc">Claude will unpack the plugin and install all 10 skills. You\u2019ll see a confirmation message when it\u2019s done.</div></div>
     </div>
-    <div class="warn">&#x26A0;&#xFE0F; <strong>Don\u2019t use the \u201CUpload Plugin\u201D button</strong> in Claude Code settings &mdash; it doesn\u2019t work for this plugin type. Upload the file directly in the chat instead.</div>
+    <div class="install-step">
+      <div class="step-circle">5</div>
+      <div><div class="step-title">See your installed skills</div><div class="step-desc">Want to verify it worked? Open the <strong>Customize</strong> sidebar and look under <strong>Personal Plugins</strong>. You\u2019ll see all 10 skills listed there, along with the slash command for each one.</div></div>
+    </div>
+    <div class="tip">&#x1F4A1; Make sure to upload the file directly in the chat and ask Claude to install it. That\u2019s all it takes.</div>
   `},
   { num: "03", label: "Start using it", html: `
     <p>Once installed, say one of these to get going:</p>
