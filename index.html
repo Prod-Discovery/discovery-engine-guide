@@ -12,16 +12,69 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Design tokens — light mode (default) */
+    :root {
+      /* Backgrounds */
+      --bg-page: #fafbfc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #eef1f5;
+      --bg-dark-section: #1a1a2e;
+
+      /* Text */
+      --text-primary: #1a1a2e;
+      --text-secondary: #3f4658;
+      --text-muted: #687081;
+      --text-on-dark: #e8e8ec;
+      --text-on-dark-muted: #b8b8bf;
+
+      /* Borders */
+      --border-color: #d4dbe2;
+      --border-strong: #b8c1cd;
+
+      /* Accents */
+      --accent: #0077b6;
+      --accent-bright: #00b4d8;
+      --accent-on-dark: #5cc9e8;
+      --accent-gradient: linear-gradient(135deg, #00b4d8, #0077b6);
+
+      /* Shadows */
+      --shadow-card: 0 1px 3px rgba(26, 26, 46, 0.06), 0 1px 2px rgba(26, 26, 46, 0.04);
+    }
+
+    /* Design tokens — dark mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-page: #0f1020;
+        --bg-surface: #1e2040;
+        --bg-subtle: #181934;
+        --bg-dark-section: #25264a;
+
+        --text-primary: #f0f2f8;
+        --text-secondary: #c8ccda;
+        --text-muted: #8b91a4;
+        --text-on-dark: #f0f2f8;
+        --text-on-dark-muted: #b0b5c4;
+
+        --border-color: #34375a;
+        --border-strong: #4a4d72;
+
+        --accent: #5cc9e8;
+        --accent-bright: #4cc3e6;
+        --accent-on-dark: #5cc9e8;
+        --accent-gradient: linear-gradient(135deg, #4cc3e6, #2a8fc9);
+
+        --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
+      }
+    }
+
     body {
       font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
-      background: #fafbfc;
-      color: #1a1a2e;
+      background: var(--bg-page);
+      color: var(--text-primary);
       min-height: 100vh;
     }
     #root { max-width: 100%; }
-    @media (prefers-color-scheme: dark) {
-      body { background: #1a1a2e; color: #e8e8ec; }
-    }
   </style>
 </head>
 <body>
@@ -100,8 +153,8 @@ const steps = [
               { phase: "SENSE", stages: ["Analyze customer data", "Research competitors", "Rank top opportunities", "Pick and commit to a solution"] },
               { phase: "SHAPE", stages: ["Write the PRD", "Build or connect your component library", "Generate interactive prototype", "Create experiment and test plan"] }
             ].map(phase => (
-              <div key={phase.phase} style={{ background: "white", borderRadius: "8px", padding: "0.85rem", border: "1px solid var(--border-color)" }}>
-                <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", color: "#00b4d8", marginBottom: "0.5rem" }}>
+              <div key={phase.phase} style={{ background: "var(--bg-surface)", borderRadius: "8px", padding: "0.85rem", border: "1px solid var(--border-color)" }}>
+                <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--accent)", marginBottom: "0.5rem" }}>
                   {phase.phase}
                 </div>
                 {phase.stages.map((s, i) => (
@@ -144,11 +197,11 @@ const steps = [
             width: "36px",
             height: "36px",
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #00b4d8, #0077b6)",
+            background: "var(--accent-gradient)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "white",
+            color: "var(--text-on-dark)",
             fontWeight: 700,
             fontSize: "0.9rem",
             flexShrink: 0,
@@ -170,7 +223,7 @@ const steps = [
                   width: "42px",
                   height: "42px",
                   borderRadius: "10px",
-                  background: "linear-gradient(135deg, #00b4d8, #0077b6)",
+                  background: "var(--accent-gradient)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -189,8 +242,8 @@ const steps = [
                     padding: "0.55rem 1.2rem",
                     border: "none",
                     borderRadius: "8px",
-                    background: "linear-gradient(135deg, #00b4d8, #0077b6)",
-                    color: "white",
+                    background: "var(--accent-gradient)",
+                    color: "var(--text-on-dark)",
                     cursor: "pointer",
                     fontFamily: "inherit",
                     fontSize: "0.88rem",
@@ -219,11 +272,11 @@ const steps = [
             width: "36px",
             height: "36px",
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #00b4d8, #0077b6)",
+            background: "var(--accent-gradient)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "white",
+            color: "var(--text-on-dark)",
             fontWeight: 700,
             fontSize: "0.9rem",
             flexShrink: 0,
@@ -254,7 +307,7 @@ const steps = [
                   color: "var(--text-secondary)",
                   lineHeight: 1.5
                 }}>
-                  <span style={{ color: "#00b4d8", fontWeight: 700, fontSize: "0.8rem", flexShrink: 0 }}>{String.fromCharCode(97 + i)}.</span>
+                  <span style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.8rem", flexShrink: 0 }}>{String.fromCharCode(97 + i)}.</span>
                   <span>{text}</span>
                 </div>
               ))}
@@ -286,8 +339,8 @@ const steps = [
             width: "32px",
             height: "32px",
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #00b4d8, #0077b6)",
-            color: "white",
+            background: "var(--accent-gradient)",
+            color: "var(--text-on-dark)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -352,8 +405,8 @@ const steps = [
             border: item.highlight ? "1px solid rgba(0, 180, 216, 0.2)" : "1px solid transparent"
           }}>
             <div style={{
-              background: "#1a1a2e",
-              color: "#e0e0e0",
+              background: "var(--bg-dark-section)",
+              color: "var(--text-on-dark-muted)",
               borderRadius: "6px",
               padding: "0.6rem 0.85rem",
               fontFamily: "'JetBrains Mono', 'SF Mono', 'Fira Code', monospace",
@@ -362,7 +415,7 @@ const steps = [
               display: "inline-block",
               border: "1px solid rgba(255,255,255,0.08)"
             }}>
-              <span style={{ color: "#888" }}>You: </span>{item.command}
+              <span style={{ color: "var(--text-muted)" }}>You: </span>{item.command}
             </div>
             <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
               {item.desc}
@@ -370,7 +423,7 @@ const steps = [
             {item.highlight && (
               <div style={{ 
                 fontSize: "0.75rem", 
-                color: "#00b4d8", 
+                color: "var(--accent)", 
                 marginTop: "0.5rem",
                 fontWeight: 600,
                 letterSpacing: "0.03em"
@@ -393,13 +446,13 @@ const steps = [
           </div>
           <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
             Type <code style={{ 
-              background: "#1a1a2e", color: "#e0e0e0", padding: "0.1rem 0.4rem", 
+              background: "var(--bg-dark-section)", color: "var(--text-on-dark-muted)", padding: "0.1rem 0.4rem", 
               borderRadius: "4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.82rem"
             }}>/</code> at any time to see a dropdown of all available skills. For example:
           </div>
           <div style={{
-            background: "#1a1a2e",
-            color: "#e0e0e0",
+            background: "var(--bg-dark-section)",
+            color: "var(--text-on-dark-muted)",
             borderRadius: "6px",
             padding: "0.6rem 0.85rem",
             fontFamily: "'JetBrains Mono', 'SF Mono', 'Fira Code', monospace",
@@ -408,7 +461,7 @@ const steps = [
             display: "inline-block",
             border: "1px solid rgba(255,255,255,0.08)"
           }}>
-            <span style={{ color: "#888" }}>You: </span>/discovery
+            <span style={{ color: "var(--text-muted)" }}>You: </span>/discovery
           </div>
         </div>
         <div style={{
@@ -481,7 +534,7 @@ const steps = [
           <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
             Found a bug? Have an idea? Want a walkthrough for your team?
           </div>
-          <div style={{ fontSize: "0.95rem", color: "#0077b6", fontWeight: 600 }}>
+          <div style={{ fontSize: "0.95rem", color: "var(--accent)", fontWeight: 600 }}>
             Reach out to Lucia Wang on Slack
           </div>
         </div>
@@ -499,12 +552,7 @@ function InstallGuide() {
       maxWidth: "680px",
       margin: "0 auto",
       padding: "2rem 1.5rem",
-      color: "var(--text-primary, #1a1a2e)",
-      "--text-primary": "#1a1a2e",
-      "--text-secondary": "#444",
-      "--text-muted": "#777",
-      "--bg-subtle": "#f4f5f7",
-      "--border-color": "#e0e2e6"
+      color: "var(--text-primary)"
     }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
@@ -513,7 +561,7 @@ function InstallGuide() {
           fontSize: "0.7rem", 
           fontWeight: 700, 
           letterSpacing: "0.15em", 
-          color: "#00b4d8",
+          color: "var(--accent)",
           marginBottom: "0.6rem",
           textTransform: "uppercase"
         }}>
@@ -556,7 +604,7 @@ function InstallGuide() {
               border: "none",
               borderRadius: "9px",
               cursor: "pointer",
-              background: activeStep === i ? "white" : "transparent",
+              background: activeStep === i ? "var(--bg-surface)" : "transparent",
               color: activeStep === i ? "var(--text-primary)" : "var(--text-muted)",
               fontWeight: activeStep === i ? 600 : 500,
               fontSize: "0.78rem",
@@ -570,7 +618,7 @@ function InstallGuide() {
             <span style={{ 
               display: "block",
               fontSize: "0.65rem", 
-              color: activeStep === i ? "#00b4d8" : "var(--text-muted)",
+              color: activeStep === i ? "var(--accent)" : "var(--text-muted)",
               marginBottom: "2px",
               fontWeight: 700,
               letterSpacing: "0.05em"
@@ -608,8 +656,8 @@ function InstallGuide() {
             padding: "0.6rem 1.25rem",
             border: "1px solid var(--border-color)",
             borderRadius: "8px",
-            background: "white",
-            color: activeStep === 0 ? "#ccc" : "var(--text-secondary)",
+            background: "var(--bg-surface)",
+            color: activeStep === 0 ? "var(--text-muted)" : "var(--text-primary)",
             cursor: activeStep === 0 ? "default" : "pointer",
             fontFamily: "inherit",
             fontSize: "0.88rem",
@@ -625,8 +673,8 @@ function InstallGuide() {
             padding: "0.6rem 1.25rem",
             border: "none",
             borderRadius: "8px",
-            background: activeStep === steps.length - 1 ? "#ccc" : "linear-gradient(135deg, #00b4d8, #0077b6)",
-            color: "white",
+            background: activeStep === steps.length - 1 ? "var(--border-strong)" : "var(--accent-gradient)",
+            color: "var(--text-on-dark)",
             cursor: activeStep === steps.length - 1 ? "default" : "pointer",
             fontFamily: "inherit",
             fontSize: "0.88rem",
