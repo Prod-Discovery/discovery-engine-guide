@@ -67,13 +67,16 @@
     /* Catch the inline-styled "heading-like" divs the React component uses:
        any element with bold weight (subtitles, card titles), uppercase
        lettering, or wide letter-spacing is treated as a display element
-       and gets Ubuntu. */
-    [style*="fontWeight: 600"],
-    [style*="fontWeight: 700"],
-    [style*="fontWeight: 800"],
-    [style*="textTransform: uppercase"],
-    [style*="letterSpacing: \"0.1"],
-    [style*="letterSpacing: \"0.15"] {
+       and gets Ubuntu.
+
+       NOTE: React renders camelCase JSX (`fontWeight`) as kebab-case CSS
+       (`font-weight`) in the DOM `style` attribute — so we match on that. */
+    [style*="font-weight: 600"],
+    [style*="font-weight: 700"],
+    [style*="font-weight: 800"],
+    [style*="text-transform: uppercase"],
+    [style*="letter-spacing: 0.1"],
+    [style*="letter-spacing: 0.15"] {
       font-family: var(--font-display) !important;
     }
   </style>
@@ -141,7 +144,7 @@ const steps = [
           background: "var(--bg-subtle)",
           borderRadius: "12px",
           padding: "1.25rem",
-          marginTop: "1rem"
+          marginTop: "2.5rem"
         }}>
           <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.95rem", marginBottom: "0.5rem" }}>
             What you're getting
@@ -407,13 +410,10 @@ const steps = [
             desc: "Skip ahead if you already have outputs from earlier stages (e.g., you have a PRD and want a prototype)",
             highlight: false
           }
-        ].map((item, i) => (
+        ].map((item, i, arr) => (
           <div key={i} style={{
-            background: item.highlight ? "rgba(0, 180, 216, 0.06)" : "var(--bg-subtle)",
-            borderRadius: "10px",
-            padding: "1rem 1.25rem",
-            marginBottom: "0.75rem",
-            border: item.highlight ? "1px solid rgba(0, 180, 216, 0.2)" : "1px solid transparent"
+            padding: "1.25rem 0",
+            borderBottom: i < arr.length - 1 ? "1px solid var(--border-color)" : "none"
           }}>
             <div style={{
               background: "var(--bg-dark-section)",
@@ -542,11 +542,16 @@ const steps = [
           <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "0.5rem" }}>
             We want your feedback
           </div>
-          <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
+          <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "1rem" }}>
             Found a bug? Have an idea? Want a walkthrough for your team?
           </div>
-          <div style={{ fontSize: "0.95rem", color: "var(--accent)", fontWeight: 600 }}>
-            Reach out to Lucia Wang on Slack
+          <div style={{ fontSize: "0.95rem", lineHeight: 1.9 }}>
+            <div>
+              Slack: <a href="https://slack.com" style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "underline" }}>@Lucia Wang</a>
+            </div>
+            <div>
+              Email: <a href="mailto:lucia.wang@visma.com" style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "underline" }}>lucia.wang@visma.com</a>
+            </div>
           </div>
         </div>
       </div>
@@ -583,7 +588,7 @@ function InstallGuide() {
           lineHeight: 1.2,
           color: "var(--text-primary)"
         }}>
-          Discovery to Prototype Engine
+          Discovery to Prototype plugin
         </h1>
         <p style={{ 
           fontSize: "0.95rem", 
@@ -640,10 +645,10 @@ function InstallGuide() {
       </div>
 
       <div style={{ minHeight: "350px" }}>
-        <h2 style={{ 
-          fontSize: "1.25rem", 
-          fontWeight: 700, 
-          margin: "0 0 1.25rem 0",
+        <h2 style={{
+          fontSize: "1.25rem",
+          fontWeight: 700,
+          margin: "0 0 0.5rem 0",
           color: "var(--text-primary)"
         }}>
           {steps[activeStep].label}
