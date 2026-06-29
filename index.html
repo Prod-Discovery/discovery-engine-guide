@@ -4,77 +4,78 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discovery to Prototype Engine - Quick Start Guide</title>
-  <meta name="description" content="Install the Discovery to Prototype Engine plugin for Claude Cowork. Go from customer data to testable prototype in hours.">
+  <meta name="description" content="Install the Discovery to Prototype Engine plugin in the Claude Desktop app (Cowork or Code tab). Go from customer data to testable prototype in hours.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Design tokens — light mode (default) */
+    /* Design tokens — Visma Product & UX Days 2026 visual identity
+       (single mode — dark by default, ignores system preference) */
     :root {
       /* Backgrounds */
-      --bg-page: #fafbfc;
-      --bg-surface: #ffffff;
-      --bg-subtle: #eef1f5;
-      --bg-dark-section: #1a1a2e;
+      --bg-page: #2a3a6a;                        /* solid fallback (midpoint of gradient) */
+      --bg-surface: rgba(15, 30, 60, 0.55);      /* cards floating over gradient — semi-transparent */
+      --bg-surface-solid: #14264a;               /* solid card alternative */
+      --bg-subtle: #14223F;                      /* solid dark navy for cards, callout boxes, and icon containers */
+      --bg-dark-section: #001f3d;                /* deepest section */
 
       /* Text */
-      --text-primary: #1a1a2e;
-      --text-secondary: #3f4658;
-      --text-muted: #687081;
-      --text-on-dark: #e8e8ec;
-      --text-on-dark-muted: #b8b8bf;
+      --text-primary: #ffffff;
+      --text-secondary: #d0d8ee;
+      --text-muted: #9ba6c8;
+      --text-on-dark: #ffffff;
+      --text-on-dark-muted: #b8c2dd;
 
-      /* Borders */
-      --border-color: #d4dbe2;
-      --border-strong: #b8c1cd;
+      /* Borders — subtle lavender tints */
+      --border-color: rgba(162, 174, 255, 0.18);
+      --border-strong: rgba(162, 174, 255, 0.38);
+      --border-highlight: #A2AEFF;               /* bright lavender border for emphasized cards */
 
-      /* Accents */
-      --accent: #0077b6;
-      --accent-bright: #00b4d8;
-      --accent-on-dark: #5cc9e8;
-      --accent-gradient: linear-gradient(135deg, #00b4d8, #0077b6);
+      /* Accents — Visma highlight */
+      --accent: #A2AEFF;                         /* primary highlight color */
+      --accent-bright: #BDC5FF;                  /* brighter variant */
+      --accent-on-dark: #A2AEFF;
+      --accent-gradient: linear-gradient(135deg, #BDC5FF, #7B89E8);
 
       /* Shadows */
-      --shadow-card: 0 1px 3px rgba(26, 26, 46, 0.06), 0 1px 2px rgba(26, 26, 46, 0.04);
-    }
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.18);
 
-    /* Design tokens — dark mode */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-page: #0f1020;
-        --bg-surface: #1e2040;
-        --bg-subtle: #181934;
-        --bg-dark-section: #25264a;
+      /* Visma signature page gradient (exact brand colors) */
+      --page-gradient: linear-gradient(135deg, #434180 0%, #003253 100%);
 
-        --text-primary: #f0f2f8;
-        --text-secondary: #c8ccda;
-        --text-muted: #8b91a4;
-        --text-on-dark: #f0f2f8;
-        --text-on-dark-muted: #b0b5c4;
-
-        --border-color: #34375a;
-        --border-strong: #4a4d72;
-
-        --accent: #5cc9e8;
-        --accent-bright: #4cc3e6;
-        --accent-on-dark: #5cc9e8;
-        --accent-gradient: linear-gradient(135deg, #4cc3e6, #2a8fc9);
-
-        --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
-      }
+      /* Typography */
+      --font-body: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+      --font-display: 'Ubuntu', 'Segoe UI', system-ui, sans-serif;
     }
 
     body {
-      font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg-page);
+      font-family: var(--font-body);
+      background: var(--page-gradient);
+      background-attachment: fixed;              /* gradient stays put while content scrolls */
       color: var(--text-primary);
       min-height: 100vh;
     }
     #root { max-width: 100%; }
+
+    /* Headings → Ubuntu */
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+
+    /* Catch the inline-styled "heading-like" divs the React component uses:
+       any element with bold weight (subtitles, card titles), uppercase
+       lettering, or wide letter-spacing is treated as a display element
+       and gets Ubuntu. */
+    [style*="fontWeight: 600"],
+    [style*="fontWeight: 700"],
+    [style*="fontWeight: 800"],
+    [style*="textTransform: uppercase"],
+    [style*="letterSpacing: \"0.1"],
+    [style*="letterSpacing: \"0.15"] {
+      font-family: var(--font-display) !important;
+    }
   </style>
 </head>
 <body>
@@ -91,7 +92,7 @@ const steps = [
     label: "Before You Start",
     content: () => (
       <div>
-        <p style={{ fontSize: "1.05rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
+        <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
           Two things you need before installing the plugin:
         </p>
         {[
@@ -103,7 +104,7 @@ const steps = [
           {
             icon: "💻",
             title: "Claude Desktop app",
-            desc: "The plugin runs in Cowork, which is part of the Claude Desktop app for macOS and Windows. Download it from claude.com/product/cowork if you haven't already."
+            desc: "The plugin runs inside the Claude Desktop app — in either the Cowork tab or the Code tab. Download the app from claude.com if you haven't already. (macOS and Windows.)"
           }
         ].map((item, i) => (
           <div key={i} style={{
@@ -120,7 +121,7 @@ const steps = [
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "1.2rem",
+              fontSize: "1.25rem",
               flexShrink: 0,
               marginTop: "2px"
             }}>
@@ -130,7 +131,7 @@ const steps = [
               <div style={{ fontWeight: 600, color: "var(--text-primary)", marginBottom: "0.35rem", fontSize: "0.95rem" }}>
                 {item.title}
               </div>
-              <div style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+              <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
                 {item.desc}
               </div>
             </div>
@@ -142,10 +143,10 @@ const steps = [
           padding: "1.25rem",
           marginTop: "1rem"
         }}>
-          <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.9rem", marginBottom: "0.5rem" }}>
+          <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.95rem", marginBottom: "0.5rem" }}>
             What you're getting
           </div>
-          <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: 1.6, margin: "0 0 1rem 0" }}>
+          <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6, margin: "0 0 1rem 0" }}>
             It takes you from raw customer data to a testable interactive prototype, guided step by step, with you in control at every checkpoint.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
@@ -153,19 +154,19 @@ const steps = [
               { phase: "SENSE", stages: ["Analyze customer data", "Research competitors", "Rank top opportunities", "Pick and commit to a solution"] },
               { phase: "SHAPE", stages: ["Write the PRD", "Build or connect your component library", "Generate interactive prototype", "Create experiment and test plan"] }
             ].map(phase => (
-              <div key={phase.phase} style={{ background: "var(--bg-surface)", borderRadius: "8px", padding: "0.85rem", border: "1px solid var(--border-color)" }}>
+              <div key={phase.phase} style={{ background: "transparent", borderRadius: "8px", padding: "0.85rem", border: "1px solid var(--border-strong)" }}>
                 <div style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", color: "var(--accent)", marginBottom: "0.5rem" }}>
                   {phase.phase}
                 </div>
                 {phase.stages.map((s, i) => (
-                  <div key={i} style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: 1.5, marginBottom: "0.25rem" }}>
+                  <div key={i} style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5, marginBottom: "0.25rem" }}>
                     {s}
                   </div>
                 ))}
               </div>
             ))}
           </div>
-          <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", margin: "0.75rem 0 0 0", fontStyle: "italic" }}>
+          <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", margin: "0.75rem 0 0 0", fontStyle: "italic" }}>
             You can correct, adjust, skip ahead, or stop at any point.
           </p>
         </div>
@@ -182,8 +183,8 @@ const steps = [
       };
       return (
       <div>
-        <p style={{ fontSize: "1.05rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
-          Two steps: download the file, then upload it in Cowork.
+        <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
+          Two steps: download the file, then upload it inside the Claude Desktop app.
         </p>
 
         {/* Step 1: Download */}
@@ -203,7 +204,7 @@ const steps = [
             justifyContent: "center",
             color: "var(--text-on-dark)",
             fontWeight: 700,
-            fontSize: "0.9rem",
+            fontSize: "0.95rem",
             flexShrink: 0,
             marginTop: "2px"
           }}>
@@ -227,14 +228,14 @@ const steps = [
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "1.2rem",
+                  fontSize: "1.25rem",
                   flexShrink: 0
                 }}>
                   📦
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.95rem" }}>{PLUGIN_FILENAME}</div>
-                  <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Contains 10 skills &bull; ~65 KB</div>
+                  <div style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>Contains 10 skills &bull; ~65 KB</div>
                 </div>
                 <button 
                   onClick={handleDownload}
@@ -246,7 +247,7 @@ const steps = [
                     color: "var(--text-on-dark)",
                     cursor: "pointer",
                     fontFamily: "inherit",
-                    fontSize: "0.88rem",
+                    fontSize: "0.95rem",
                     fontWeight: 600,
                     flexShrink: 0
                   }}
@@ -254,7 +255,7 @@ const steps = [
                   Download
                 </button>
               </div>
-              <div style={{ fontSize: "0.82rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
                 Save it somewhere easy to find. Your Desktop or Downloads folder works fine.
               </div>
             </div>
@@ -278,7 +279,7 @@ const steps = [
             justifyContent: "center",
             color: "var(--text-on-dark)",
             fontWeight: 700,
-            fontSize: "0.9rem",
+            fontSize: "0.95rem",
             flexShrink: 0,
             marginTop: "2px"
           }}>
@@ -286,9 +287,9 @@ const steps = [
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 600, color: "var(--text-primary)", marginBottom: "0.75rem", fontSize: "0.95rem" }}>
-              Upload in Cowork
+              Upload to Claude
             </div>
-            <div style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+            <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
               Open the <strong style={{ color: "var(--text-primary)" }}>Claude Desktop app</strong> and switch to the <strong style={{ color: "var(--text-primary)" }}>Cowork</strong> tab. Then:
             </div>
             <div style={{ marginTop: "0.75rem" }}>
@@ -303,11 +304,11 @@ const steps = [
                   gap: "0.6rem",
                   alignItems: "baseline",
                   marginBottom: "0.5rem",
-                  fontSize: "0.88rem",
+                  fontSize: "0.95rem",
                   color: "var(--text-secondary)",
                   lineHeight: 1.5
                 }}>
-                  <span style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.8rem", flexShrink: 0 }}>{String.fromCharCode(97 + i)}.</span>
+                  <span style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.85rem", flexShrink: 0 }}>{String.fromCharCode(97 + i)}.</span>
                   <span>{text}</span>
                 </div>
               ))}
@@ -320,12 +321,22 @@ const steps = [
           border: "1px solid rgba(255, 183, 77, 0.2)",
           borderRadius: "10px",
           padding: "1rem 1.25rem",
-          fontSize: "0.88rem",
+          fontSize: "0.95rem",
           color: "var(--text-secondary)",
           lineHeight: 1.6,
           marginTop: "1rem"
         }}>
           <strong style={{ color: "var(--text-primary)" }}>Important:</strong> Do not unzip the file. Upload the entire .zip file you just downloaded into the uploader.
+        </div>
+
+        <div style={{
+          fontSize: "0.85rem",
+          color: "var(--text-muted)",
+          lineHeight: 1.6,
+          marginTop: "0.75rem",
+          fontStyle: "italic"
+        }}>
+          Already a Claude Code CLI user? You can install it directly from the terminal with <code style={{ fontFamily: "'JetBrains Mono', monospace", fontStyle: "normal", background: "var(--bg-dark-section)", color: "var(--text-on-dark-muted)", padding: "0.1rem 0.4rem", borderRadius: "4px" }}>/plugin marketplace add Prod-Discovery/discovery-engine-plugin</code>. See the <a href="https://github.com/Prod-Discovery/discovery-engine-plugin#readme" style={{ color: "var(--accent)", textDecoration: "underline" }}>README</a> for the full CLI flow.
         </div>
 
         {/* Step 3: Verify */}
@@ -353,7 +364,7 @@ const steps = [
             <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.95rem", marginBottom: "0.35rem" }}>
               Verify the install
             </div>
-            <div style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+            <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
               Once installed, open the <strong style={{ color: "var(--text-primary)" }}>Customize</strong> sidebar and click into the plugin. You should see this screen with all skills listed:
             </div>
             <div style={{
@@ -362,7 +373,7 @@ const steps = [
               overflow: "hidden",
               border: "1px solid var(--border-color)"
             }}>
-              <img src={SCREENSHOT_B64} alt="Discovery Engine plugin installed in Cowork, showing all skills" style={{
+              <img src={SCREENSHOT_B64} alt="Discovery Engine plugin installed, showing all skills" style={{
                 width: "100%",
                 display: "block"
               }} />
@@ -377,7 +388,7 @@ const steps = [
     label: "Start Using It",
     content: () => (
       <div>
-        <p style={{ fontSize: "1.05rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
+        <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
           Once installed, say one of these to get going:
         </p>
         {[
@@ -422,7 +433,7 @@ const steps = [
             </div>
             {item.highlight && (
               <div style={{ 
-                fontSize: "0.75rem", 
+                fontSize: "0.7rem", 
                 color: "var(--accent)", 
                 marginTop: "0.5rem",
                 fontWeight: 600,
@@ -441,13 +452,13 @@ const steps = [
           marginTop: "0.75rem",
           marginBottom: "0.75rem"
         }}>
-          <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.9rem", marginBottom: "0.4rem" }}>
+          <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.95rem", marginBottom: "0.4rem" }}>
             💡 Slash commands
           </div>
           <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
             Type <code style={{ 
               background: "var(--bg-dark-section)", color: "var(--text-on-dark-muted)", padding: "0.1rem 0.4rem", 
-              borderRadius: "4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.82rem"
+              borderRadius: "4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.85rem"
             }}>/</code> at any time to see a dropdown of all available skills. For example:
           </div>
           <div style={{
@@ -477,7 +488,7 @@ const steps = [
           <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.7 }}>
             A product strategy doc or pitch deck &bull; Customer data exports (CSV) &bull; 2-4 competitor names
           </div>
-          <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.5rem", fontStyle: "italic" }}>
+          <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginTop: "0.5rem", fontStyle: "italic" }}>
             Don't worry: the engine asks for each of these at the right moment. You don't need everything upfront.
           </div>
         </div>
@@ -489,7 +500,7 @@ const steps = [
     label: "Help & Support",
     content: () => (
       <div>
-        <p style={{ fontSize: "1.05rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
+        <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
           Running into issues or want to go deeper? Here's where to go.
         </p>
         {[
@@ -499,7 +510,7 @@ const steps = [
           },
           {
             title: "Plugin not showing up after install",
-            desc: "Close and reopen the Claude Desktop app. If the plugin still doesn't appear, check that Cowork and Skills are both enabled in your account settings."
+            desc: "Close and reopen the Claude Desktop app. If the plugin still doesn't appear, make sure Plugins are enabled in your account settings."
           },
           {
             title: "Want to run just one stage",
@@ -512,7 +523,7 @@ const steps = [
             padding: "1rem 1.25rem",
             marginBottom: "0.75rem"
           }}>
-            <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.9rem", marginBottom: "0.35rem" }}>
+            <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.95rem", marginBottom: "0.35rem" }}>
               {item.title}
             </div>
             <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
@@ -531,7 +542,7 @@ const steps = [
           <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "0.5rem" }}>
             We want your feedback
           </div>
-          <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
+          <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "0.75rem" }}>
             Found a bug? Have an idea? Want a walkthrough for your team?
           </div>
           <div style={{ fontSize: "0.95rem", color: "var(--accent)", fontWeight: 600 }}>
@@ -548,14 +559,12 @@ function InstallGuide() {
 
   return (
     <div style={{
-      fontFamily: "'DM Sans', 'Segoe UI', system-ui, sans-serif",
+      fontFamily: "'Open Sans', 'Segoe UI', system-ui, sans-serif",
       maxWidth: "680px",
       margin: "0 auto",
       padding: "2rem 1.5rem",
       color: "var(--text-primary)"
     }}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
       <div style={{ marginBottom: "2.5rem" }}>
         <div style={{ 
           fontSize: "0.7rem", 
@@ -604,12 +613,12 @@ function InstallGuide() {
               border: "none",
               borderRadius: "9px",
               cursor: "pointer",
-              background: activeStep === i ? "var(--bg-surface)" : "transparent",
+              background: activeStep === i ? "rgba(162, 174, 255, 0.18)" : "transparent",
               color: activeStep === i ? "var(--text-primary)" : "var(--text-muted)",
               fontWeight: activeStep === i ? 600 : 500,
-              fontSize: "0.78rem",
+              fontSize: "0.85rem",
               transition: "all 0.2s ease",
-              boxShadow: activeStep === i ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+              boxShadow: activeStep === i ? "0 2px 8px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(162, 174, 255, 0.3)" : "none",
               fontFamily: "inherit",
               lineHeight: 1.3,
               textAlign: "center"
@@ -617,7 +626,7 @@ function InstallGuide() {
           >
             <span style={{ 
               display: "block",
-              fontSize: "0.65rem", 
+              fontSize: "0.7rem", 
               color: activeStep === i ? "var(--accent)" : "var(--text-muted)",
               marginBottom: "2px",
               fontWeight: 700,
@@ -660,29 +669,30 @@ function InstallGuide() {
             color: activeStep === 0 ? "var(--text-muted)" : "var(--text-primary)",
             cursor: activeStep === 0 ? "default" : "pointer",
             fontFamily: "inherit",
-            fontSize: "0.88rem",
+            fontSize: "0.95rem",
             fontWeight: 500
           }}
         >
           ← Back
         </button>
-        <button
-          onClick={() => setActiveStep(Math.min(steps.length - 1, activeStep + 1))}
-          disabled={activeStep === steps.length - 1}
-          style={{
-            padding: "0.6rem 1.25rem",
-            border: "none",
-            borderRadius: "8px",
-            background: activeStep === steps.length - 1 ? "var(--border-strong)" : "var(--accent-gradient)",
-            color: "var(--text-on-dark)",
-            cursor: activeStep === steps.length - 1 ? "default" : "pointer",
-            fontFamily: "inherit",
-            fontSize: "0.88rem",
-            fontWeight: 600
-          }}
-        >
-          Next →
-        </button>
+        {activeStep < steps.length - 1 && (
+          <button
+            onClick={() => setActiveStep(activeStep + 1)}
+            style={{
+              padding: "0.6rem 1.25rem",
+              border: "none",
+              borderRadius: "8px",
+              background: "var(--accent-gradient)",
+              color: "var(--text-on-dark)",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: "0.95rem",
+              fontWeight: 600
+            }}
+          >
+            Next →
+          </button>
+        )}
       </div>
     </div>
   );
