@@ -1,0 +1,18 @@
+# Code owners for the Discovery to Prototype plugin Quick Start Guide.
+#
+# Used together with branch protection on `main` — every PR requires
+# review from at least one listed owner before it can be merged.
+# Path-specific lines beat the global line, so the /downloads/ folder
+# (where the auto-published plugin ZIP and checksum live) gets the
+# same protection as the rest of the repo, but is called out
+# explicitly because it's the highest-risk path.
+
+# Global default — applies to every file unless overridden below.
+*                       @cristinaiftode @luciazw-visma
+
+# The downloadable plugin payload — explicitly listed so it's obvious
+# this folder is owned and any change here will require review.
+/downloads/             @cristinaiftode @luciazw-visma
+
+# CODEOWNERS itself — only the existing owners can change ownership.
+/.github/CODEOWNERS     @cristinaiftode @luciazw-visma
