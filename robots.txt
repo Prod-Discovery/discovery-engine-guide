@@ -1,0 +1,8 @@
+# Discovery to Prototype plugin — Quick Start Guide
+#
+# This site is intended for known partners (Visma teams + invited
+# external collaborators). It is not meant to be discoverable by
+# search engines.
+
+User-agent: *
+Disallow: /
