@@ -227,7 +227,7 @@ const steps = [
   {
     number: "01",
     label: "Download & Install",
-    content: ({ checksum }) => {
+    content: ({ checksum, versionInfo }) => {
       const handleDownload = () => {
         fireTelemetry('download_clicked', PLUGIN_FILENAME);
         window.open(PLUGIN_DOWNLOAD_URL, "_blank");
@@ -286,7 +286,7 @@ const steps = [
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "0.95rem" }}>{PLUGIN_FILENAME}</div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>Contains 11 skills &bull; ~88 KB &bull; always the latest version</div>
+                  <div style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>Contains 11 skills &bull; always the latest version{versionInfo && <> &bull; v{versionInfo.version} &middot; released {new Date(versionInfo.released + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</>}</div>
                 </div>
                 <button 
                   onClick={handleDownload}
@@ -627,6 +627,7 @@ const steps = [
 function InstallGuide() {
   const [activeStep, setActiveStep] = useState(0);
   const [checksum, setChecksum] = useState(null);
+  const [versionInfo, setVersionInfo] = useState(null);
 
   // Fetch the SHA256 of the current ZIP so users can verify integrity.
   // The file is produced by the plugin repo's release.yml workflow; it
@@ -635,6 +636,15 @@ function InstallGuide() {
     // Log a page-view event so we can see how many people land here
     // (versus how many click Download). Gives us a real funnel.
     fireTelemetry('page_viewed');
+
+    // Version + release date of the ZIP being served. Written by the
+    // plugin repo's release workflow alongside the ZIP itself.
+    fetch('downloads/version.json')
+      .then(r => (r.ok ? r.json() : null))
+      .then(info => {
+        if (info && info.version) setVersionInfo(info);
+      })
+      .catch(() => {});
 
     fetch('downloads/SHA256SUMS.txt')
       .then(r => (r.ok ? r.text() : null))
@@ -738,7 +748,7 @@ function InstallGuide() {
         }}>
           {steps[activeStep].label}
         </h2>
-        {steps[activeStep].content({ checksum })}
+        {steps[activeStep].content({ checksum, versionInfo })}
       </div>
 
       <div style={{ 
