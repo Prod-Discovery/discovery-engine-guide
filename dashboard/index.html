@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Discovery to Prototype plugin — Usage Dashboard</title>
+  <meta name="description" content="Live usage metrics for the Discovery to Prototype Engine plugin.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Design tokens — same visual identity as the Quick Start Guide */
+    :root {
+      --bg-page: #2a3a6a;
+      --bg-surface: rgba(15, 30, 60, 0.55);
+      --bg-subtle: #14223F;
+      --bg-dark-section: #001f3d;
+      --text-primary: #ffffff;
+      --text-secondary: #d0d8ee;
+      --text-muted: #9ba6c8;
+      --border-color: rgba(162, 174, 255, 0.18);
+      --border-strong: rgba(162, 174, 255, 0.38);
+      --accent: #A2AEFF;
+      --accent-bright: #BDC5FF;
+      --accent-gradient: linear-gradient(135deg, #BDC5FF, #7B89E8);
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.18);
+      --page-gradient: linear-gradient(135deg, #434180 0%, #003253 100%);
+      --font-body: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+      --font-display: 'Ubuntu', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--page-gradient);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+    .eyebrow {
+      font-family: var(--font-display);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 0.6rem;
+    }
+    h1 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; line-height: 1.2; }
+    .subtitle { font-size: 0.95rem; color: var(--text-muted); margin-top: 0.6rem; }
+    .subtitle strong { color: var(--text-secondary); font-weight: 600; }
+
+    h2 {
+      font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+      margin: 2.5rem 0 1rem;
+    }
+    h2 span { color: var(--accent); }
+
+    /* KPI cards */
+    .kpi-grid {
+      display: grid; gap: 0.85rem; margin-top: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    }
+    .kpi {
+      background: var(--bg-subtle); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 1.1rem 1.25rem; box-shadow: var(--shadow-card);
+    }
+    .kpi .label {
+      font-family: var(--font-display); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.45rem;
+    }
+    .kpi .value { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; line-height: 1; }
+    .kpi .value small { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+    .kpi .hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.4; }
+    .kpi.highlight { border-color: var(--border-strong); }
+    .kpi.highlight .value { color: var(--accent-bright); }
+
+    /* Chart cards */
+    .card {
+      background: var(--bg-subtle); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-card);
+    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+    .chart-holder { position: relative; height: 280px; }
+    .chart-holder.tall { height: 320px; }
+
+    /* Funnel */
+    .funnel-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.55rem; }
+    .funnel-label {
+      width: 130px; flex-shrink: 0; text-align: right;
+      font-size: 0.82rem; color: var(--text-secondary); font-weight: 600;
+      font-family: var(--font-display);
+    }
+    .funnel-track { flex: 1; background: rgba(162,174,255,0.08); border-radius: 6px; height: 26px; overflow: hidden; }
+    .funnel-bar {
+      height: 100%; background: var(--accent-gradient); border-radius: 6px;
+      min-width: 2px; transition: width 0.6s ease;
+    }
+    .funnel-count { width: 40px; flex-shrink: 0; font-size: 0.85rem; font-weight: 700; font-family: var(--font-display); }
+
+    /* Feedback */
+    .fb-item { padding: 0.85rem 0; border-bottom: 1px solid var(--border-color); }
+    .fb-item:last-child { border-bottom: none; }
+    .fb-stars { color: var(--accent-bright); letter-spacing: 0.1em; font-size: 0.9rem; }
+    .fb-comment { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.55; margin-top: 0.3rem; }
+    .fb-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    .note { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin-top: 2.5rem; }
+    .note a { color: var(--accent); }
+
+    /* Loading / error states */
+    #state {
+      margin-top: 2rem; background: var(--bg-subtle); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 1.5rem; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;
+    }
+    #state code {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+      background: var(--bg-dark-section); padding: 0.1rem 0.4rem; border-radius: 4px;
+    }
+    .spinner {
+      display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--border-strong); border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite; margin-right: 0.5rem; vertical-align: -2px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #dash { display: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Usage Dashboard</div>
+    <h1>Discovery to Prototype plugin</h1>
+    <p class="subtitle" id="updated">Live metrics from anonymous plugin telemetry and the install guide.</p>
+
+    <div id="state"><span class="spinner"></span>Loading live data…</div>
+
+    <div id="dash">
+      <h2>Adoption <span>at a glance</span></h2>
+      <div class="kpi-grid" id="kpis"></div>
+
+      <h2>Activity <span>— last 30 days</span></h2>
+      <div class="card"><div class="chart-holder tall"><canvas id="dailyChart"></canvas></div></div>
+
+      <h2>Workflow <span>funnel</span></h2>
+      <div class="card" id="funnelCard">
+        <div id="funnel"></div>
+        <div class="hint" style="font-size:0.78rem;color:var(--text-muted);margin-top:0.75rem;">
+          Unique users who completed each stage of the workflow (tracked since v1.7.0, July 2026).
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:2.5rem;">
+        <div>
+          <h2 style="margin-top:0;">Most used <span>skills</span></h2>
+          <div class="card"><div class="chart-holder"><canvas id="skillsChart"></canvas></div></div>
+        </div>
+        <div>
+          <h2 style="margin-top:0;">Version <span>adoption</span></h2>
+          <div class="card"><div class="chart-holder"><canvas id="versionChart"></canvas></div></div>
+        </div>
+      </div>
+
+      <h2>User <span>feedback</span></h2>
+      <div class="card" id="feedbackCard"></div>
+    </div>
+
+    <p class="note">
+      All data is anonymous — no names, emails, prompts, or content; only event counts from the plugin's
+      built-in telemetry and the install guide. Data updates live from the tracking store on every page load.
+      · <a href="../">Install guide</a>
+    </p>
+  </div>
+
+  <script>
+    // Aggregated-stats endpoint (Google Apps Script web app, returns JSON).
+    // Serves ONLY summary numbers — raw telemetry rows never leave the sheet.
+    const API_URL = "https://script.google.com/macros/s/AKfycbxYWdgHlJG5gzBqb-HQji4jr32jj-pM21WeCN2eYW_UeT_GiKVQqlCmTw9XHi3QvSSt/exec";
+
+    const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+    const ACCENT = "#A2AEFF", ACCENT2 = "#7B89E8", ACCENT3 = "#5F6BC4", MUTED = "#9ba6c8";
+    const GRID = "rgba(162, 174, 255, 0.10)";
+
+    Chart.defaults.font.family = "'Open Sans', sans-serif";
+    Chart.defaults.color = MUTED;
+    Chart.defaults.borderColor = GRID;
+
+    const fmt = n => (n === null || n === undefined) ? "–" : Number(n).toLocaleString("en-GB");
+    const pct = x => (x === null || x === undefined) ? "–" : Math.round(x * 100) + "%";
+
+    function kpi(label, value, hint, highlight) {
+      return `<div class="kpi${highlight ? " highlight" : ""}">
+        <div class="label">${label}</div>
+        <div class="value">${value}</div>
+        ${hint ? `<div class="hint">${hint}</div>` : ""}
+      </div>`;
+    }
+
+    function render(d) {
+      document.getElementById("state").style.display = "none";
+      document.getElementById("dash").style.display = "block";
+      document.getElementById("updated").innerHTML =
+        `Live metrics from anonymous telemetry · updated <strong>${new Date(d.updated).toLocaleString("en-GB", {day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit"})}</strong>`;
+
+      const t = d.totals;
+      document.getElementById("kpis").innerHTML = [
+        kpi("Machines with plugin", fmt(t.machines), `${fmt(t.activeMachines7d)} active in the last 7 days`, true),
+        kpi("Users who used a skill", fmt(t.skillUsers), `${fmt(t.skillInvocations)} skill invocations total`, true),
+        kpi("Install → use rate", pct(d.conversion.installToUse), "of installed machines actually ran a skill"),
+        kpi("Guide page views", fmt(t.pageViews), `${fmt(t.uniqueVisitors)} unique visitors`),
+        kpi("Plugin downloads", fmt(t.downloads), `${fmt(t.uniqueDownloaders)} unique downloaders`),
+        kpi("View → download rate", pct(d.conversion.viewToDownload), "visitors who clicked Download"),
+        kpi("Average rating", t.avgRating ? `${t.avgRating.toFixed(1)}<small> / 5</small>` : "–", `${fmt(t.feedbackCount)} feedback submission${t.feedbackCount === 1 ? "" : "s"}`),
+        kpi("Workflow completions", fmt(t.workflowCompletions), "users reaching Stage 6"),
+      ].join("");
+
+      // Daily activity line chart
+      new Chart(document.getElementById("dailyChart"), {
+        type: "line",
+        data: {
+          labels: d.daily.map(x => new Date(x.date + "T00:00:00").toLocaleDateString("en-GB", {day:"numeric", month:"short"})),
+          datasets: [
+            { label: "Guide page views", data: d.daily.map(x => x.pageViews), borderColor: ACCENT, backgroundColor: "rgba(162,174,255,0.12)", fill: true, tension: 0.35, pointRadius: 2 },
+            { label: "Downloads", data: d.daily.map(x => x.downloads), borderColor: "#E8C468", backgroundColor: "transparent", tension: 0.35, pointRadius: 2 },
+            { label: "Skill invocations", data: d.daily.map(x => x.skillInvocations), borderColor: "#6FDBB5", backgroundColor: "transparent", tension: 0.35, pointRadius: 2 },
+          ]
+        },
+        options: {
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: { legend: { labels: { usePointStyle: true, boxHeight: 7 } } },
+          scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } }
+        }
+      });
+
+      // Funnel
+      const stageNames = { "0": "Stage 0 · Context", "1.1": "1.1 · Customer data", "1.2": "1.2 · Competitors", "1.3": "1.3 · Top 5", "2": "Stage 2 · Scoring", "3": "Stage 3 · PRD", "4": "Stage 4 · Components", "5": "Stage 5 · Prototype", "6": "Stage 6 · Test plan" };
+      const maxUsers = Math.max(1, ...d.funnel.map(f => f.users));
+      document.getElementById("funnel").innerHTML = d.funnel.map(f => `
+        <div class="funnel-row">
+          <div class="funnel-label">${stageNames[f.stage] || "Stage " + f.stage}</div>
+          <div class="funnel-track"><div class="funnel-bar" style="width:${Math.round(f.users / maxUsers * 100)}%"></div></div>
+          <div class="funnel-count">${f.users}</div>
+        </div>`).join("") || '<div style="color:var(--text-muted);font-size:0.9rem;">No stage completions recorded yet — data flows in as users run workflows on v1.7.0+.</div>';
+
+      // Skills bar chart
+      const skills = d.skills.slice(0, 8);
+      new Chart(document.getElementById("skillsChart"), {
+        type: "bar",
+        data: {
+          labels: skills.map(s => s.name),
+          datasets: [{ data: skills.map(s => s.count), backgroundColor: ACCENT2, borderRadius: 5, barThickness: 18 }]
+        },
+        options: {
+          indexAxis: "y", maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } }
+        }
+      });
+
+      // Version doughnut
+      new Chart(document.getElementById("versionChart"), {
+        type: "doughnut",
+        data: {
+          labels: d.versions.map(v => "v" + v.version),
+          datasets: [{ data: d.versions.map(v => v.machines), backgroundColor: [ACCENT, ACCENT2, ACCENT3, "#46508F", "#333A66"], borderWidth: 2, borderColor: css("--bg-subtle") }]
+        },
+        options: {
+          maintainAspectRatio: false, cutout: "62%",
+          plugins: { legend: { position: "right", labels: { usePointStyle: true, boxHeight: 7 } } }
+        }
+      });
+
+      // Feedback list
+      const fb = d.recentFeedback || [];
+      document.getElementById("feedbackCard").innerHTML = fb.length
+        ? fb.map(f => `<div class="fb-item">
+            <div class="fb-stars">${"★".repeat(f.rating)}${"☆".repeat(5 - f.rating)}</div>
+            ${f.comment ? `<div class="fb-comment">“${f.comment}”</div>` : ""}
+            <div class="fb-date">${new Date(f.date).toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"})}</div>
+          </div>`).join("")
+        : '<div style="color:var(--text-muted);font-size:0.9rem;">No feedback submitted yet. Users can send anonymous feedback by typing “give feedback” in any plugin session.</div>';
+    }
+
+    fetch(API_URL)
+      .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(d => { if (!d || !d.totals) throw new Error("unexpected payload"); render(d); })
+      .catch(err => {
+        document.getElementById("state").innerHTML =
+          `<strong>Couldn't load the data.</strong><br><br>
+           The stats endpoint didn't respond as expected (<code>${String(err.message || err)}</code>).
+           If this dashboard was just set up, the Apps Script probably needs the <code>doGet</code>
+           function deployed — see the setup notes. Otherwise, try refreshing in a minute.`;
+      });
+  </script>
+</body>
+</html>
