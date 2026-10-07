@@ -102,6 +102,17 @@
     .funnel-count { width: 40px; flex-shrink: 0; font-size: 0.85rem; font-weight: 700; font-family: var(--font-display); }
 
     /* Feedback */
+    .teams-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .teams-table th {
+      font-family: var(--font-display); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      text-align: left; padding: 0.4rem 0.75rem 0.55rem 0; border-bottom: 1px solid var(--border-strong);
+    }
+    .teams-table td { padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); vertical-align: top; }
+    .teams-table tr:last-child td { border-bottom: none; }
+    .teams-table td.co { color: var(--text-primary); font-weight: 600; font-family: var(--font-display); }
+    .teams-table td.num { font-family: var(--font-display); font-weight: 700; }
+
     .fb-item { padding: 0.85rem 0; border-bottom: 1px solid var(--border-color); }
     .fb-item:last-child { border-bottom: none; }
     .fb-stars { color: var(--accent-bright); letter-spacing: 0.1em; font-size: 0.9rem; }
@@ -162,6 +173,9 @@
           <div class="card"><div class="chart-holder"><canvas id="versionChart"></canvas></div></div>
         </div>
       </div>
+
+      <h2>Companies <span>using the plugin</span></h2>
+      <div class="card" id="teamsCard"></div>
 
       <h2>User <span>feedback</span></h2>
       <div class="card" id="feedbackCard"></div>
@@ -277,6 +291,20 @@
           plugins: { legend: { position: "right", labels: { usePointStyle: true, boxHeight: 7 } } }
         }
       });
+
+      // Companies table
+      const teams = d.teams || [];
+      document.getElementById("teamsCard").innerHTML = teams.length
+        ? `<div style="overflow-x:auto;"><table class="teams-table">
+             <thead><tr><th>Company</th><th>Product(s)</th><th>Machines</th><th>Last seen</th></tr></thead>
+             <tbody>${teams.map(t => `<tr>
+               <td class="co">${t.company}</td>
+               <td>${(t.products || []).join(", ") || "–"}</td>
+               <td class="num">${t.machines}</td>
+               <td>${t.lastSeen ? new Date(t.lastSeen).toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"}) : "–"}</td>
+             </tr>`).join("")}</tbody>
+           </table></div>`
+        : '<div style="color:var(--text-muted);font-size:0.9rem;">No teams identified yet — the engine asks each team for company and product name during onboarding (ships with the next plugin release). Rows appear here as teams run their first workflow.</div>';
 
       // Feedback list
       const fb = d.recentFeedback || [];
