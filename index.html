@@ -349,6 +349,7 @@ section{padding:72px 24px}
 .feedback .links a:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
 
 .pager{max-width:808px;margin:0 auto;padding:8px 24px 72px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.pager.wide{max-width:1048px}
 .pager .lbl{display:block;font-size:12.5px;font-weight:500;opacity:.75}
 .pager #next{margin-left:auto}
 .pager .btn > span:not(.tri){display:flex;flex-direction:column;align-items:flex-start;text-align:left}
@@ -893,6 +894,8 @@ footer a{color:var(--footer-link)}
       if(on){ var bar=t.parentNode; bar.scrollLeft=t.offsetLeft-(bar.clientWidth-t.offsetWidth)/2; }
     });
     var i=order.indexOf(id), prev=document.getElementById('prev'), next=document.getElementById('next');
+    // Tab 1 uses the wide 1000px column; the pager follows it so Next aligns with the box above.
+    document.querySelector('.pager').classList.toggle('wide', id==='what');
     prev.hidden=(i===0); next.hidden=(i===order.length-1);
     if(i>0){prev.href='#'+order[i-1];document.getElementById('prev-t').textContent=names[order[i-1]];}
     if(i<order.length-1){next.href='#'+order[i+1];document.getElementById('next-t').textContent=names[order[i+1]];}
